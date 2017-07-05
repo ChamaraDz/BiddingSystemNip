@@ -45,7 +45,9 @@ Route::get('/logout', [
 
 Route::get('/account', [
     'uses' => 'UserController@getAccount',
-    'as' => 'account'
+    'as' => 'account',
+    'middleware' => 'auth'
+
 ]);
 
 Route::post('/upateaccount', [
@@ -58,17 +60,31 @@ Route::get('/userimage/{filename}', [
     'as' => 'account.image'
 ]);
 
+/// Dashboard
+
 Route::get('/dashboard', [
     'uses' => 'PostController@getDashboard',
     'as' => 'dashboard',
     'middleware' => 'auth'
 ]);
 
+       
+
+Route::get('/dashboard/users', [
+    'uses' => 'PostController@getDashboardUsers',
+    'as' => 'dashboardUser',
+    'middleware' => 'auth'
+]);
+       
+
+  
+
 Route::post('/createpost', [
     'uses' => 'PostController@postCreatePost',
     'as' => 'post.create',
     'middleware' => 'auth'
 ]);
+
 
 Route::get('/delete-post/{post_id}', [
     'uses' => 'PostController@getDeletePost',
@@ -85,4 +101,5 @@ Route::post('/like', [
     'uses' => 'PostController@postLikePost',
     'as' => 'like'
 ]);
+
 

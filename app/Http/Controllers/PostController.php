@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use App\Post;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -15,6 +16,13 @@ class PostController extends Controller
         $posts = Post::orderBy('created_at', 'desc')->get();
         return view('dashboard', ['posts' => $posts]);
     }
+
+    public function getDashboardUsers()
+    {
+        $posts = User::orderBy('created_at', 'desc')->get();
+        return view('dashboardUser', ['posts' => $posts]);
+    }
+
 
     public function postCreatePost(Request $request)
     {
