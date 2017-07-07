@@ -60,21 +60,54 @@ Route::get('/userimage/{filename}', [
     'as' => 'account.image'
 ]);
 
+
+
+
 /// Dashboard
 
 Route::get('/dashboard', [
-    'uses' => 'PostController@getDashboard',
+    'uses' => 'dashboardController@getDashboard',
     'as' => 'dashboard',
     'middleware' => 'auth'
 ]);
 
        
 
+
+
+//// Dashboard Users
+
 Route::get('/dashboard/users', [
-    'uses' => 'PostController@getDashboardUsers',
+    'uses' => 'dashboardController@getDashboardUsers',
     'as' => 'dashboardUser',
     'middleware' => 'auth'
 ]);
+
+Route::get('/delete-user/{id}', [
+    'uses' => 'dashboardController@UserDeleteUser',
+    'as' => 'user.delete',
+    'middleware' => 'auth'
+]);
+
+Route::get('/approve-user/{id}', [
+    'uses' => 'dashboardController@approveUser',
+    'as' => 'user.approve',
+    'middleware' => 'auth'
+]);
+
+Route::get('/disapprove-user/{id}', [
+    'uses' => 'dashboardController@disapproveUser',
+    'as' => 'user.disapprove',
+    'middleware' => 'auth'
+]);
+
+
+Route::post('/edit-user', [
+    'uses' => 'dashboardController@UserEditUser',
+    'as' => 'edit-user'
+]);
+
+//////////////////
        
 
   

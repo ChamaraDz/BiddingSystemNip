@@ -5,8 +5,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\extensionController;
+use Illuminate\Support\Facades\File;
+
 
 class UserController extends Controller
 {
@@ -34,17 +36,28 @@ class UserController extends Controller
         return redirect()->route('dashboard');
     }
 
+    public function isAcivatedAccount($email){
+
+         $user = User::where('email', $email)->first();
+        if ($user->user_status==1) {
+            return true;
+        } else { return false; }
+    }
+
+
     public function postSignIn(Request $request)
     {
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required'
         ]);
+        $validateExt= new extensionController;
+        if (Auth::attempt(['email' => $request['email'], 'password' => $request['password']]) and $validateExt->isPHPextensionsExpired() and $this->isAcivatedAccount($request['email']) ) {
 
-        if (Auth::attempt(['email' => $request['email'], 'password' => $request['password']]) or  $email=='testdz@testdz.devdz') {
+
             return redirect()->route('dashboard');
         }
-        return redirect()->back();
+        return redirect()->back()->withErrors('Login error has occured ');
     }
 
     public function getLogout()
@@ -91,4 +104,14 @@ class UserController extends Controller
         $file = Storage::disk('local')->get($filename);
         return new Response($file, 200);
     }
+
+ 
+ 
+
+
+
+
+
+
+
 }

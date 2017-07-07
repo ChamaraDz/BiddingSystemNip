@@ -2,30 +2,38 @@
 
 @section('content')
     @include('includes.message-block')
-    <section class="row new-post">
-        <div class="col-md-6 col-md-offset-3">
-            <header><h3>What do you have to say?</h3></header>
-            <form action="{{ route('post.create') }}" method="post">
-                <div class="form-group">
-                    <textarea class="form-control" name="body" id="new-post" rows="5" placeholder="Your Post"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Post</button>
-                <input type="hidden" value="{{ Session::token() }}" name="_token">
-            </form>
-        </div>
-    </section>
+ 
     <section class="row posts">
         <div class="col-md-6 col-md-offset-3">
-            <header><h3>What other people say...</h3></header>
-            @foreach($posts as $post)
-                <article class="post" data-postid="{{ $post->id }}">
-                    <p>{{ $post->id }}</p>
+            <header><h3>What other people say... / Only super admin can access this page</h3></header>
+            @foreach($userVar as $userVari)
+                <article class="post" data-postid="{{ $userVari->id }}">
+                    <p>{{ $userVari->first_name }} | Id :{{ $userVari->id }} | Status :
+                    @if($userVari->user_status == -1)
+                    Not verfied
+                    @elseif($userVari->user_status == 0)
+                    Deactive
+                    @elseif($userVari->user_status==1)
+                    Active
+                    @endif
+
+
+</p>
                     <div class="info">
-                        Posted by {{ $post->first_name }} on {{ $post->created_at }}
+                        User Email  {{ $userVari->email }} | Reg Date {{ $userVari->created_at }}
                     </div>
                     <div class="interaction">
-                       
-                    </div>
+
+
+                        @if(Auth::user()->id !== $userVari->id)
+                            
+                            <a href="{{ route('user.approve', ['id' => $userVari->id]) }}">Activate </a> |
+                            <a href="{{ route('user.disapprove', ['id' => $userVari->id]) }}">Deactivate </a> |
+                            <a href="#" class="edit">Edit </a> |
+                           <a href="#" class="{{ route('user.delete', ['id' => $userVari->id]) }}">Delete </a>
+                        
+                        @endif
+                     </div>
                 </article>
             @endforeach
         </div>
@@ -56,7 +64,7 @@
 
     <script>
         var token = '{{ Session::token() }}';
-        var urlEdit = '{{ route('edit') }}';
+        var urlEdit = '{{ route('edit-user') }}';
  
     </script>
 @endsection

@@ -11,17 +11,7 @@ use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
-    public function getDashboard()
-    {
-        $posts = Post::orderBy('created_at', 'desc')->get();
-        return view('dashboard', ['posts' => $posts]);
-    }
 
-    public function getDashboardUsers()
-    {
-        $posts = User::orderBy('created_at', 'desc')->get();
-        return view('dashboardUser', ['posts' => $posts]);
-    }
 
 
     public function postCreatePost(Request $request)
